@@ -1,7 +1,10 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": [
+        "src",
+        "test"
+    ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "c:\\Users\\ainem\\OneDrive\\Documents\\Software Craftmanship\\social-network\\lib\\junit-platform-console-standalone-1.11.2.jar"
     ]
 }
