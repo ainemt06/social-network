@@ -13,4 +13,8 @@ public class Network {
         edges = new TreeSet<Connection<Person, Person>>();
         nodes = new TreeSet<Person>();
     }
+
+   // public addEdge(Person person1, Person person2) {
+
+    //}
 }

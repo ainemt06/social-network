@@ -2,7 +2,7 @@ package network;
 
 import java.util.Objects;
 
-class Connection<A, B> {
+public class Connection<A, B> {
 
     private final A first;
     private final B second;
