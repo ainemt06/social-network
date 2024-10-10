@@ -1,13 +1,15 @@
 package person;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
-public class Person {
+
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+public class Person implements Comparable<Person> {
     private final String id;
     private final String name;
-    private List<Person> connections;
+    private final SortedSet<Person> connections;
 
     public Person(String id, String name) {
         Optional<String> optionalId = Optional.ofNullable(id);
@@ -20,7 +22,7 @@ public class Person {
 
         this.id = validId;
         this.name = validName;
-        connections = new ArrayList<Person>();
+        connections = new TreeSet<Person>();
     }
 
     public String getName() {
@@ -31,7 +33,21 @@ public class Person {
         return new String(id);
     }
 
+    public SortedSet<Person> getConnections() {
+        return connections;
+    }
+
     public void addConnection(Person newPerson) {
         connections.add(newPerson);
+    }
+
+    public void removeConnection(Person removedPerson) {
+        connections.remove(removedPerson);
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return this.getName().compareTo(o.getName());
+        
     }
 }

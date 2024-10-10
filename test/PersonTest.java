@@ -28,6 +28,46 @@ public class PersonTest {
         alice.addConnection(brittany);
         brittany.addConnection(alice);
 
-        
+        assertEquals("Alice", brittany.getConnections().first().getName());
+        assertEquals("Brittany", alice.getConnections().first().getName());
+    }
+
+    @Test
+    void ensureNoDuplicateConnections() {
+        Person alice = createPerson("0", "Alice");
+        Person brittany = createPerson("1", "Brittany");
+
+        alice.addConnection(brittany);
+        alice.addConnection(brittany);
+
+        assertEquals(1, alice.getConnections().size());
+    }
+
+    @Test
+    void removesConnectionsCorrectly() {
+        Person alice = createPerson("0", "Alice");
+        Person brittany = createPerson("1", "Brittany");
+
+        alice.addConnection(brittany);
+        brittany.addConnection(alice);
+
+        alice.removeConnection(brittany);
+        brittany.removeConnection(alice);
+
+        assertEquals(0, alice.getConnections().size());
+
+        assertEquals(0, brittany.getConnections().size());
+    }
+
+    @Test
+    void ensureNoDuplicateDeletions() {
+        Person alice = createPerson("0", "Alice");
+        Person brittany = createPerson("1", "Brittany");
+
+        alice.addConnection(brittany);
+        alice.removeConnection(brittany);
+        alice.removeConnection(brittany);
+
+        assertEquals(0, alice.getConnections().size());
     }
 }
