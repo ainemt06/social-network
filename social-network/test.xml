@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SocialNetworkTest" default="test" basedir=".">
+   
+    <!-- Properties -->
+    <property name="bin.dir" value="bin"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="test.dir" value="test"/>
+
+    <!-- Clean Target (for cleaning reports) -->
+    <target name="clean">
+        <delete dir="reports"/>
+    </target>
+
+    <!-- Run Tests with JUnit -->
+    <target name="test" depends="clean">
+        <mkdir dir="reports/junit"/>
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
+            <classpath>
+                <pathelement path="${bin.dir}"/>
+                <pathelement path="${bin.dir}/test"/>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+            <formatter type="plain"/>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="reports/junit">
+                <fileset dir="${test.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+    
+</project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SocialNetworkBuild" default="build" basedir=".">
+   
+    <!-- Properties -->
+    <property name="src.dir" value="src"/>
+    <property name="bin.dir" value="bin"/>
+    <property name="test.dir" value="test"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Clean Target: Deletes the bin directory -->
+    <target name="clean">
+        <delete dir="${bin.dir}"/>
+    </target>
+
+    <!-- Compile Target: Compiles the source files into the bin directory -->
+    <target name="compile">
+        <mkdir dir="${bin.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Compile Tests Target: Compiles the test classes into bin/test -->
+    <target name="compile-tests" depends="compile">
+        <mkdir dir="${bin.dir}/test"/>
+        <javac srcdir="${test.dir}" destdir="${bin.dir}/test">
+            <classpath>
+                <pathelement path="${bin.dir}"/>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Default build target (compiles both source and test classes) -->
+    <target name="build" depends="clean, compile, compile-tests"/>
+</project>
