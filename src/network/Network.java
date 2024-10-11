@@ -134,16 +134,14 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
     Set<Person> visitedOther, Map<Person, Person> parentSelf) {
 
 
-        //Placeholder list that allows streams to execute on the result
-        Optional<Person> placeholderPerson = null;
-        final List<Optional<Person>> result = new ArrayList<Optional<Person>>();
-        result.add(placeholderPerson);
+        Optional<Person> result = null;
+        
+        for (Person node : queue) {
+            queue.poll();
 
-        queue.stream().forEach(node -> {
-
-            result.set(0, edges.get(node).stream() //modifies value inside the final list
+            result = edges.get(node).stream() //modifies value inside the final list
                 .filter(neighbor -> visitedOther.contains(neighbor))
-                .findFirst());
+                .findFirst();
             
             Optional<Person> selfResult = edges.get(node).stream()
                 .filter(neighbor -> visitedSelf.contains(neighbor))
@@ -158,9 +156,9 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
                 parentSelf.put(givenResult, node);  // Track the parent for path reconstruction
             }
 
-        }); 
+        } 
         
-        return result.get(0);
+        return result;
     }
 
 
