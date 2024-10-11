@@ -5,8 +5,11 @@ import person.Person;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Objects;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.HashSet;
@@ -61,7 +64,7 @@ public List<Person> findInfluencers(int k) {
     return influencerList;
 }
 
-public List<Connection<Person>> findShortestPath(Person source, Person target) throws NullPointerException {
+public List<Person> findShortestPath(Person source, Person target) throws NullPointerException {
     //Uses bidirectional BFS to find the shortest path between two people
     
     Objects.requireNonNull(source);
@@ -78,10 +81,66 @@ public List<Connection<Person>> findShortestPath(Person source, Person target) t
     Set<Person> visitedSource = new HashSet<Person>();
     Set<Person> visitedTarget = new HashSet<Person>();
 
-    List<Connection<Person>> parentSource = new LinkedList<>();
-    List<Connection<Person>> parentTarget = new LinkedList<>();
+    Map<Person, Person> parentSource = new HashMap<>();
+    Map<Person, Person> parentTarget = new HashMap<>();
 
-    return parentSource;
+    queueSource.add(source);
+    queueTarget.add(target);
+    visitedSource.add(source);
+    visitedTarget.add(target);
+    parentSource.put(source, null);  // Source has no parent
+    parentTarget.put(target, null);  // Target has no parent
+
+    while (!queueSource.isEmpty() && !queueTarget.isEmpty()) {
+        Optional<Person> meetingPoint = 
+            this.nextBFSStep(edges, queueSource, visitedSource, visitedTarget, parentSource);
+        
+        if(meetingPoint.isPresent())
+            return null; //TODO: add constructpath
+        
+        meetingPoint = nextBFSStep(edges, queueTarget, visitedTarget, visitedSource, parentTarget);
+
+        if (meetingPoint.isPresent())
+            return null; //TODO: add constructpath
+
+        }
+
+
+    return Collections.emptyList();
 }
+
+private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph, 
+    Queue<Person> queue, Set<Person> visitedSelf, 
+    Set<Person> visitedOther, Map<Person, Person> parentSelf) {
+
+
+        //Placeholder list that allows streams to execute on the result
+        Optional<Person> placeholderPerson = null;
+        final List<Optional<Person>> result = new ArrayList<Optional<Person>>();
+        result.add(placeholderPerson);
+
+        queue.stream().forEach(node -> {
+
+            result.set(0, edges.get(node).stream() //modifies value inside the final list
+                .filter(neighbor -> visitedOther.contains(neighbor))
+                .findFirst());
+            
+            Optional<Person> selfResult = edges.get(node).stream()
+                .filter(neighbor -> visitedSelf.contains(neighbor))
+                .findFirst();
+
+            if (selfResult.isPresent()) {
+
+                Person givenResult = selfResult.get();
+
+                queue.add(givenResult);
+                visitedSelf.add(givenResult);
+                parentSelf.put(givenResult, node);  // Track the parent for path reconstruction
+            }
+
+        }); 
+        
+        return result.get(0);
+    }
 
 }
