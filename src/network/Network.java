@@ -96,12 +96,12 @@ public List<Person> findShortestPath(Person source, Person target) throws NullPo
             this.nextBFSStep(edges, queueSource, visitedSource, visitedTarget, parentSource);
         
         if(meetingPoint.isPresent())
-            return null; //TODO: add constructpath
+            return constructBFSPath(target, parentSource, parentTarget); 
         
         meetingPoint = nextBFSStep(edges, queueTarget, visitedTarget, visitedSource, parentTarget);
 
         if (meetingPoint.isPresent())
-            return null; //TODO: add constructpath
+            return constructBFSPath(target, parentSource, parentTarget); 
 
         }
 
@@ -141,6 +141,27 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
         }); 
         
         return result.get(0);
+    }
+
+private List<Person> constructBFSPath(Person meetingPoint,
+    Map<Person, Person> parentSource, Map<Person, Person> parentTarget) {
+        List<Person> path = new LinkedList<>();
+
+        Person current = meetingPoint;
+
+        while (current != null) {
+            path.add(0, current);
+            current = parentSource.get(current);
+        }
+
+        current = parentTarget.get(meetingPoint);
+        
+        while (current != null) {
+            path.add(current);
+            current = parentTarget.get(current);
+        }
+
+        return path;
     }
 
 }
