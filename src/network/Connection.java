@@ -2,12 +2,12 @@ package network;
 
 import java.util.Objects;
 
-public class Connection<A, B> {
+public class Connection<A> {
 
     private final A first;
-    private final B second;
+    private final A second;
 
-    public Connection(A thing1, B thing2) {
+    public Connection(A thing1, A thing2) {
         Objects.requireNonNull(thing1);
         Objects.requireNonNull(thing2);
 
@@ -19,8 +19,16 @@ public class Connection<A, B> {
         return first;
     }
 
-    public B getSecond() {
+    public A getSecond() {
         return second;
+    }
+
+    public boolean equals(Connection<A> connection) {
+        if (this.first.equals(connection.getFirst()) && this.second.equals(connection.getSecond()))
+            return true;
+        else if (this.second.equals(connection.getFirst()) && this.first.equals(connection.getSecond()))
+            return true;
+        return false;
     }
 
 }
