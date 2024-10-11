@@ -120,8 +120,6 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
         final List<Optional<Person>> result = new ArrayList<Optional<Person>>();
         result.add(placeholderPerson);
 
-
-
         queue.stream().forEach(node -> {
 
             result.set(0, edges.get(node).stream() //modifies value inside the final list
