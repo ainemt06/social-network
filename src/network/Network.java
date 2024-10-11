@@ -37,6 +37,7 @@ public static void main(String[] args) {
     network.addEdge(alice, bob);
     network.addEdge(bob, charlie);
     network.addEdge(charlie, dave);
+    network.addEdge(bob, dave);
 
     List<Person> path = network.findShortestPath(alice, dave);
         
@@ -55,9 +56,9 @@ public void addEdge(Person person1, Person person2) {
         person1.addConnection(person2);
         person2.addConnection(person1);
 
-        if (!edges.containsKey(person1))
+        //if (!edges.containsKey(person1))
             edges.put(person1, person1.getConnections());
-        if (!edges.containsKey(person2))
+        //if (!edges.containsKey(person2))
             edges.put(person2, person2.getConnections());
 
     }
@@ -116,12 +117,12 @@ public List<Person> findShortestPath(Person source, Person target) throws NullPo
             this.nextBFSStep(edges, queueSource, visitedSource, visitedTarget, parentSource);
         
         if(meetingPoint.isPresent())
-            return constructBFSPath(target, parentSource, parentTarget); 
+            return constructBFSPath(meetingPoint.get(), parentSource, parentTarget); 
         
         meetingPoint = nextBFSStep(edges, queueTarget, visitedTarget, visitedSource, parentTarget);
 
         if (meetingPoint.isPresent())
-            return constructBFSPath(target, parentSource, parentTarget); 
+            return constructBFSPath(meetingPoint.get(), parentSource, parentTarget); 
 
         }
 
@@ -136,29 +137,28 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
 
         Optional<Person> result = null;
         
-        for (Person node : queue) {
-            queue.poll();
+        while (!queue.isEmpty()) {
+            Person node = queue.poll();
 
-            result = edges.get(node).stream() //modifies value inside the final list
+            result = edges.get(node).stream() 
                 .filter(neighbor -> visitedOther.contains(neighbor))
                 .findFirst();
             
-            Optional<Person> selfResult = edges.get(node).stream()
-                .filter(neighbor -> visitedSelf.contains(neighbor))
-                .findFirst();
+            if (result.isPresent())
+                return Optional.ofNullable(node);
 
-            if (selfResult.isPresent()) {
+            edges.get(node).stream()
+                .filter(neighbor -> !visitedSelf.contains(neighbor))
+                .forEach( neighborNode -> {
+                    queue.add(neighborNode);
+                    visitedSelf.add(neighborNode);
+                    parentSelf.put(neighborNode, node);
+                }
+                );
 
-                Person givenResult = selfResult.get();
-
-                queue.add(givenResult);
-                visitedSelf.add(givenResult);
-                parentSelf.put(givenResult, node);  // Track the parent for path reconstruction
             }
-
-        } 
         
-        return result;
+        return Optional.empty();
     }
 
 

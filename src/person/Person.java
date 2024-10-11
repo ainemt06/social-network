@@ -16,7 +16,7 @@ public class Person implements Comparable<Person> {
         String validId = optionalId.filter(s -> !s.isEmpty())
             .orElseThrow(() -> new IllegalArgumentException("Id must not be null or empty"));
         
-            Optional<String> optionalName = Optional.ofNullable(id);
+            Optional<String> optionalName = Optional.ofNullable(name);
         String validName = optionalName.filter(s -> !s.isEmpty())
             .orElseThrow(() -> new IllegalArgumentException("Name must not be null or empty"));
 

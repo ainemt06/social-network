@@ -21,8 +21,6 @@ class NetworkTest {
     @BeforeEach    
     void setUp() {
 
-
-
         network = new Network();
         alice = new Person("0", "Alice");
         bob = new Person("1","Bob");
@@ -67,6 +65,7 @@ class NetworkTest {
         network.addEdge(alice, bob);
         network.addEdge(bob, charlie);
         network.addEdge(charlie, dave);
+        network.addEdge(bob, dave);
 
         List<Person> path = network.findShortestPath(alice, dave);
         assertNotNull(path);
