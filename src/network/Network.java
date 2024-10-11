@@ -56,10 +56,8 @@ public void addEdge(Person person1, Person person2) {
         person1.addConnection(person2);
         person2.addConnection(person1);
 
-        //if (!edges.containsKey(person1))
-            edges.put(person1, person1.getConnections());
-        //if (!edges.containsKey(person2))
-            edges.put(person2, person2.getConnections());
+        edges.put(person1, person1.getConnections());
+        edges.put(person2, person2.getConnections());
 
     }
 
@@ -114,12 +112,12 @@ public List<Person> findShortestPath(Person source, Person target) throws NullPo
 
     while (!queueSource.isEmpty() && !queueTarget.isEmpty()) {
         Optional<Person> meetingPoint = 
-            this.nextBFSStep(edges, queueSource, visitedSource, visitedTarget, parentSource);
+            this.nextBFSStep(edges, queueSource, visitedSource, visitedTarget, parentSource, parentTarget);
         
         if(meetingPoint.isPresent())
             return constructBFSPath(meetingPoint.get(), parentSource, parentTarget); 
         
-        meetingPoint = nextBFSStep(edges, queueTarget, visitedTarget, visitedSource, parentTarget);
+        meetingPoint = nextBFSStep(edges, queueTarget, visitedTarget, visitedSource, parentTarget, parentSource);
 
         if (meetingPoint.isPresent())
             return constructBFSPath(meetingPoint.get(), parentSource, parentTarget); 
@@ -132,7 +130,7 @@ public List<Person> findShortestPath(Person source, Person target) throws NullPo
 
 private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph, 
     Queue<Person> queue, Set<Person> visitedSelf, 
-    Set<Person> visitedOther, Map<Person, Person> parentSelf) {
+    Set<Person> visitedOther, Map<Person, Person> parentSelf, Map<Person, Person> parentOther) {
 
 
         Optional<Person> result = null;
@@ -144,8 +142,10 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
                 .filter(neighbor -> visitedOther.contains(neighbor))
                 .findFirst();
             
-            if (result.isPresent())
+            if (result.isPresent()) {
+                parentOther.put(node, result.get());
                 return Optional.ofNullable(node);
+            }
 
             edges.get(node).stream()
                 .filter(neighbor -> !visitedSelf.contains(neighbor))
@@ -172,8 +172,9 @@ private List<Person> constructBFSPath(Person meetingPoint,
             path.add(0, current);
             current = parentSource.get(current);
         }
+        current = meetingPoint;
 
-        current = parentTarget.get(meetingPoint);
+        current = parentTarget.get(current);
         
         while (current != null) {
             path.add(current);
