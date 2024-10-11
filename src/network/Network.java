@@ -26,6 +26,25 @@ public class Network {
         nodes = new TreeSet<Person>();
     }
 
+public static void main(String[] args) {
+
+    Network network = new Network();
+    Person alice = new Person("0", "Alice");
+    Person bob = new Person("1","Bob");
+    Person charlie = new Person("2", "Charlie");
+    Person dave = new Person("3","Dave");
+
+    network.addEdge(alice, bob);
+    network.addEdge(bob, charlie);
+    network.addEdge(charlie, dave);
+
+    List<Person> path = network.findShortestPath(alice, dave);
+        
+    path.stream().forEach(person -> {
+        System.out.println(person.getName());
+    });
+}
+
 public void addEdge(Person person1, Person person2) {
         Objects.requireNonNull(person1);
         Objects.requireNonNull(person2);
@@ -143,6 +162,7 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
         
         return result.get(0);
     }
+
 
 private List<Person> constructBFSPath(Person meetingPoint,
     Map<Person, Person> parentSource, Map<Person, Person> parentTarget) {
