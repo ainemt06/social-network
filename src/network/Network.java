@@ -5,6 +5,8 @@ import person.Person;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Objects;
+import java.util.List;
+import java.util.Comparator;
 
 public class Network {
     private final SortedSet<Connection<Person>> edges;
@@ -41,6 +43,21 @@ public void removeEdge(Person person1, Person person2) {
     person1.removeConnection(person2);
     person2.removeConnection(person1);
 
-    //edges.remove();
+
+    //Checks if there are any edges containing these two people, and deletes them
+    edges.stream().forEach(edge -> {
+        if (edge.equals(new Connection<Person>(person1, person2)))
+            edges.remove(edge);
+    });
 }
+
+public List<Person> findInfluencers(int k) {
+    List<Person> influencerList = List.copyOf(nodes);
+
+    influencerList.stream()
+        .sorted(Comparator.comparingInt(Person::getConnectionsSize));
+
+    return influencerList;
+}
+
 }

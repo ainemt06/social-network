@@ -34,7 +34,11 @@ public class Person implements Comparable<Person> {
     }
 
     public SortedSet<Person> getConnections() {
-        return connections;
+        return new TreeSet<Person>(connections);
+    }
+
+    public int getConnectionsSize() {
+        return connections.size();
     }
 
     public void addConnection(Person newPerson) {
