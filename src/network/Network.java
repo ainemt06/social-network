@@ -84,6 +84,7 @@ public List<Person> findShortestPath(Person source, Person target) throws NullPo
     Map<Person, Person> parentSource = new HashMap<>();
     Map<Person, Person> parentTarget = new HashMap<>();
 
+
     queueSource.add(source);
     queueTarget.add(target);
     visitedSource.add(source);
@@ -118,6 +119,8 @@ private Optional<Person> nextBFSStep(Map<Person, Set<Person>> graph,
         Optional<Person> placeholderPerson = null;
         final List<Optional<Person>> result = new ArrayList<Optional<Person>>();
         result.add(placeholderPerson);
+
+
 
         queue.stream().forEach(node -> {
 
