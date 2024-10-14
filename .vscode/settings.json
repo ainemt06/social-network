@@ -6,5 +6,8 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "c:\\Users\\ainem\\OneDrive\\Documents\\Software Craftmanship\\social-network\\lib\\junit-platform-console-standalone-1.11.2.jar"
-    ]
+    ],
+
+    "remote.SSH.showLoginTerminal": true,
+    "remote.SSH.useLocalServer": false
 }
